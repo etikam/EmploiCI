@@ -21,7 +21,6 @@ class Group(models.Model):
         return f'{self.number}-{self.department.label}'
 
 
-
 class Semestre(models.Model):
     number = models.IntegerField()
     deleted = models.BooleanField(default=False)
@@ -29,31 +28,15 @@ class Semestre(models.Model):
         return f'{self.number}'
     
 
-class Etudiant(models.Model):
-    username = models.CharField(max_length=50, primary_key=True)
-    last_name = models.CharField(max_length=50)
-    first_name = models.CharField(max_length=50)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    semestre = models.ForeignKey(Semestre, on_delete=models.CASCADE)
-    deleted = models.BooleanField(default=False)
-    def __str__(self):
-        return self.username
 
 
-class Teacher(models.Model):
-    username = models.CharField(max_length=50, primary_key=True)
-    last_name = models.CharField(max_length=50)
-    first_name = models.CharField(max_length=50)
-    telephone = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100)
-    deleted = models.BooleanField(default=False)
-    def __str__(self): 
-        return self.username
+
       
 class Course(models.Model):
+  
     label = models.CharField(max_length=50)
     semestre = models.ForeignKey(Semestre, on_delete=models.CASCADE)
-    Teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    Teacher = models.ForeignKey('account.Teacher', on_delete=models.CASCADE)
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
@@ -86,7 +69,7 @@ class HourRange(models.Model):
     
 
 class ProfDispoWeek(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teacher = models.ForeignKey('account.Teacher', on_delete=models.CASCADE)
     day_week = models.DateField(auto_now=False, auto_now_add=False)
     hourRange = models.ForeignKey(HourRange, on_delete=models.CASCADE)
 

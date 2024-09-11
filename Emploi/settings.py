@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'Emploi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Utilise le backend MySQL
-        'NAME': 'Emploi_db',  # Remplacez par le nom de votre base de données
+        'NAME': 'emploidb',  # Remplacez par le nom de votre base de données
         'USER': 'root',  # Remplacez par votre nom d'utilisateur MySQL
         'PASSWORD': '',  # Remplacez par votre mot de passe MySQL
         'HOST': 'localhost',  # Ou l'adresse IP de votre serveur MySQL
