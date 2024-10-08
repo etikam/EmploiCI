@@ -85,12 +85,12 @@ WSGI_APPLICATION = 'Emploi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # Utilise le backend MySQL
-        'NAME': 'Emploi_db',  # Remplacez par le nom de votre base de données
-        'USER': 'root',  # Remplacez par votre nom d'utilisateur MySQL
-        'PASSWORD': '',  # Remplacez par votre mot de passe MySQL
-        'HOST': 'localhost',  # Ou l'adresse IP de votre serveur MySQL
-        'PORT': '3306',  # Port MySQL par défaut
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'emploidb',  
+        'USER': 'root',  
+        'PASSWORD': '',  
+        'HOST': 'localhost',  
+        'PORT': '3306', 
     }
 }
 
@@ -129,6 +129,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+import os
+
+# Chemin de base pour les fichiers média
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 
 STATIC_URL = 'static/'
 
@@ -136,3 +143,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+
+

@@ -33,14 +33,26 @@
                             </div>
                             <!--end:Menu item-->
                             <!--begin:Menu item-->
+                            {% if user.is_authenticated %}
+                            {% if user.teacher_set.exists %} 
                             <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-0 me-lg-2">
                                 <!--begin:Menu link-->
-                                <span class="menu-link">
+
+                            
+                        
+                          
+                                
+                                {% comment %} <span class="menu-link">
                                     <span class="menu-title">Ma disponibilité</span>
                                     <span class="menu-arrow d-lg-none"></span>
-                                </span>
-               
+                                </span> {% endcomment %}
+
+                                <div class="menu-item px-5">
+                                    <a href="{% url 'emploi:dispo' %}" class="menu-link px-5">Mes Disponibilité</a>
+                                </div>
                             </div>
+                            {% endif %}
+                            {% endif %}
                            
                         </div>
                         <!--end::Menu-->
@@ -66,9 +78,9 @@
                                         <!--end::Avatar-->
                                         <!--begin::Username-->
                                         <div class="d-flex flex-column">
-                                            <div class="fw-bold d-flex align-items-center fs-5">Kamano
-                                            <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Pour nous</span></div>
-                                            <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">max@kt.com</a>
+                                            <div class="fw-bold d-flex align-items-center fs-5">{{user.username}}
+                                            <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Connecté</span></div>
+                                            <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">{{user.last_name}}</a>
                                         </div>
                                         <!--end::Username-->
                                     </div>
@@ -78,8 +90,8 @@
                                 <div class="separator my-2"></div>
                                 <!--end::Menu separator-->
                                 <!--begin::Menu item-->
-                                <div class="menu-item px-5">
-                                    <a href="../../demo1/dist/account/overview.html" class="menu-link px-5">My Profile</a>
+                               <div class="menu-item px-5">
+                                    <a href="{% url 'account:teacher_profil' %}" class="menu-link px-5">Mon Profile</a>
                                 </div>
     
                                 
@@ -88,7 +100,7 @@
                                 <div class="separator my-2"></div>
          
                                 <div class="menu-item px-5">
-                                    <a href="../../demo1/dist/authentication/layouts/corporate/sign-in.html" class="menu-link px-5">Sign Out</a>
+                                    <a href="{% url 'account:app_logout' %}" class="menu-link px-5">Déconnexion</a>
                                 </div>
                                 <!--end::Menu item-->
                             </div>
