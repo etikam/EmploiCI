@@ -92,6 +92,16 @@ class TeacherProfilForm(forms.ModelForm):
         })
     )
     
+    adresse = forms.CharField(
+        max_length=255,
+        label='bio',
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control form-control-lg form-control-solid',
+            'placeholder': 'Biographie / Parcours'
+        })
+    )
+    
     cv = forms.FileField(
         label='CV',
         required=False,
@@ -102,7 +112,7 @@ class TeacherProfilForm(forms.ModelForm):
 
     class Meta:
         model = Teacher
-        fields = ['telephone', 'photo', 'adresse', 'cv']  # Exclure 'user'
+        fields = ['telephone', 'photo', 'adresse', 'cv','bio']  # Exclure 'user'
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -111,3 +121,4 @@ class TeacherProfilForm(forms.ModelForm):
         if user is not None:
             self.fields['first_name'].initial = user.first_name
             self.fields['last_name'].initial = user.last_name
+            

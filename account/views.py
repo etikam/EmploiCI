@@ -113,13 +113,11 @@ def teacher_profil(request):
     if request.method == 'POST':
         form = TeacherProfilForm(request.POST, request.FILES, user=request.user, instance=teacher)
         if form.is_valid():
-            print('=========Le formulaire est soumis =======')
             form.save()
-            print('=========Le formulaire est save =======')
             messages.success(request, "Les modifications ont été enregistrées avec succès.")
-            return redirect('account:teacher_profil')
+            return redirect('emploi:app_home')
         else:
-            print(f'========={form.errors}============')
+            messages.error(request, "Une erreur est survenu lors de la mise à jour de votre profile")
     else:
         
         form = TeacherProfilForm(user=request.user, instance=teacher)

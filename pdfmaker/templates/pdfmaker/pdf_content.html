@@ -7,12 +7,16 @@
     <style>
         @page {
             size: A4 landscape;
-            margin: 1in;
+            margin: 0.5in;
         }
+  
+        
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            font-weight: 700;
+            font-size: 10px;
         }
         table {
             width: 100%;
@@ -49,15 +53,22 @@
     </style>
 </head>
 <body>
-    <div class="row">
-        <div class="col text-center">
-            <h1>Centre Informatique</h1>
-        </div>
-    </div>
+    <table style="width: 100%; border-collapse: collapse; border: none;">
+        <tr>
+            <td style="border: none; text-align: left; vertical-align: middle;">
+                <h1>Emploi du Temps</h1>
+                <h3><strong>Centre Informatique</strong></h3>
+                <p><strong>Licence: {{group.licence.number}}</strong></p> 
+                <p><strong>Departement: {{group.licence.department.label}}</strong></p> 
+            </td>
+            <td style="border: none; text-align: right; vertical-align: middle;">
+                <img src="{{ image_url }}" alt="Description de l'image" width="100" height="100">
+            </td>
+        </tr>
+    </table>
     
-    <h1>Emploi du Temps</h1>
-    <h2>Licence: {{ licence }} ({{ department.label }})</h2>
-    <img src="{% static 'assets/media/auth/image.jpg' %}" alt="Description de l'image" width="300" height="200">
+    
+
 
 
     <table>
@@ -94,13 +105,12 @@
     </table>
 
     <br>
-    <div class="row">
-        <p class="col text-left">
-            Le Directeur
-        </p>
-        <p class="col text-right">
-            Le Chef de Département
-        </p>
-    </div>
+    <hr>
+    <table class="row" style="width: 100%; border-collapse: collapse; border: none;">
+        <tr>
+           <td class="col text-left"style="width: 100%; border-collapse: collapse; border: none;"> Le Directeur</td>
+           <td class="col text-right" style="width: 100%; border-collapse: collapse; border: none;">Le Chef de Département</td>
+        </tr>
+    </table>
 </body>
 </html>

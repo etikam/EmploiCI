@@ -4,6 +4,7 @@ from EmploiApp.models import Licence, Group, Seance, Department, Semestre
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.contrib.auth.decorators import login_required
+from django.templatetags.static import static
 from xhtml2pdf import pisa
 # Create your views here.
 @login_required(login_url='account:app_login')
@@ -26,22 +27,17 @@ def emploi(request):
 
 # Liste des jours de la semaine en fonction de ton modèle
 JOURS_SEMAINE = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+
+
 @login_required(login_url='account:app_login')
 def render_pdf_view(request):
     if not request.user.is_superuser:
-        
         return redirect('emploi:app_home')
     if request.method == "POST":
-        print('Je suis rentré')
         group_id = request.POST.get('group_id')
         try:
-            
-            # departement = Department.objects.get(id= department_id)
-            # print('Departement =======>',departement)
-            # licence = Licence.objects.get(id=licence_id,department=departement)
-            # print('Departement =======>',licence)
-            groups = Group.objects.filter(id=group_id)
-            seances = Seance.objects.filter(group__in=groups).select_related('course', 'classroom', 'profDispoWeek')
+            group = Group.objects.select_related('licence', 'licence__department').get(id=group_id)
+            seances = Seance.objects.filter(group=group).select_related('course', 'classroom', 'profDispoWeek')
 
             # Grouper les séances par jour
             seances_par_jour = defaultdict(list)
@@ -50,13 +46,12 @@ def render_pdf_view(request):
 
             # S'assurer que chaque jour est présent même s'il n'a pas de séance
             seances_avec_jours_vide = {day: seances_par_jour.get(day, []) for day in JOURS_SEMAINE}
-
-            # Contexte avec les jours et séances
+            image_url = request.build_absolute_uri(static('assets/media/small_logo.png'))
+            # Contexte avec le groupe et ses séances
             context = {
-                # 'licence': licence,
-                'groups':groups ,
-                # 'department': licence.department,
+                'group': group,
                 'seances_par_jour': seances_avec_jours_vide,
+                'image_url': image_url,
             }
             
             template_path = 'pdfmaker/pdf_content.html'
@@ -74,7 +69,7 @@ def render_pdf_view(request):
             
             return response
 
-        except Licence.DoesNotExist:
-            return HttpResponse('Licence introuvable.', status=404)
+        except Group.DoesNotExist:
+            return HttpResponse('Groupe introuvable.', status=404)
     else:
         return redirect(emploi)

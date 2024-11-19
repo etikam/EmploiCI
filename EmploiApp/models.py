@@ -3,10 +3,6 @@ from .custom_manager import ProfDispoWeekManagerActivation
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from datetime import datetime, timedelta
-
-# Create your models here.
-# CLASS_TYPE =['0']
-
 class Department(models.Model):
     
     label = models.CharField(max_length = 150, unique=True)
@@ -78,6 +74,9 @@ class Course(models.Model):
 
     def __str__(self):
         return f'{self.label}-Sem:{self.semestre}'
+    
+    class Meta:
+        ordering = ['label']
 
 
 class Classroom(models.Model):
@@ -254,6 +253,7 @@ class Seance(models.Model):
 
 
     def clean(self):
+    
         # Vérifier si la disponibilité du professeur est fournie
         if not self.profDispoWeek:
             raise ValidationError(_('Le champ "Disponibilité du prof" est requis.'))
@@ -294,6 +294,17 @@ class Seance(models.Model):
             if not (self.h_end <= conflict.h_start or self.h_start >= conflict.h_end):
                 raise ValidationError(_('Cette salle est déjà réservée à ce moment pour un autre cours.'))
 
+        start_datetime = datetime.combine(datetime.today(), self.h_start)
+        end_datetime = datetime.combine(datetime.today(), self.h_end)
+        difference_en_heures = (end_datetime - start_datetime) / timedelta(hours=1)
+
+        if difference_en_heures < 2:
+            raise ValidationError(
+                _('La durée de la séance doit être d\'aumoins  2 heures, actuellement %(difference)s heures.'),
+                params={'difference': difference_en_heures})
+       
+# ========================================================================================
+
         # Vérifier les conflits pour le groupe
         
         # print("GROUPE CHOISIS ++++++++",self.group.all())
@@ -303,7 +314,7 @@ class Seance(models.Model):
         #     conflits = [group for group in seance.group.all() if group in self.group.all()]
         #     if len(conflits)>0:
         #         raise ValidationError("L'un des groupes choisi a deja cours pendant ce temps")
-               
+        
         # conflicts = Seance.objects.filter(
         #     group__in=self.group.all(),
         #     day_week=self.day_week,
@@ -313,7 +324,22 @@ class Seance(models.Model):
         # for conflict in conflicts:
         #     if not (self.h_end <= conflict.h_start or self.h_start >= conflict.h_end):
         #         raise ValidationError(_("L'un des groupes selectionné a déjà une seance à ce moment."))
+        
+        # for group in self.group.all():
+        #     overlapping_group_seances = Seance.objects.filter(
+        #     group=group,
+        #     day_week=self.day_week,
+        #     h_start__lt=self.h_end,
+        #     h_end__gt=self.h_start
+        #     ).exclude(id=self.id)
 
+        # if overlapping_group_seances.exists():
+        #     raise ValidationError(
+        #         _('Le groupe %(group)s est déjà affecté à une autre séance durant cette période.'),
+        #         params={'group': group}
+        #     )
+
+# ========================================================================================
         # Vérifier la capacité de la salle
         # from account.models import Etudiant
         # nb_student_in_choosed_group = Etudiant.objects.filter(group__in=self.group.all()).count()
@@ -323,3 +349,10 @@ class Seance(models.Model):
 
 
         
+
+
+
+
+
+class Rapport(models.Model):
+    title  = models.CharField(max_length=100)
