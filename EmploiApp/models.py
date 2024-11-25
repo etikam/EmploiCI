@@ -150,7 +150,7 @@ class ProfDispoWeek(models.Model):
             raise ValidationError(
                 _('La différence entre l\'heure de début et l\'heure de fin doit être d\'au moins 2 heures, actuellement %(difference)s heures.'),
                 params={'difference': difference_en_heures})
-       
+    
     def update_intervals(self, new_start=None, new_end=None):
         if new_start is not None and new_end is not None:
             # Convertir les objets time en chaînes
@@ -241,14 +241,11 @@ class Seance(models.Model):
         else:
             # Aucune disponibilité occupée, donc remettre busy à False
             prof_dispo.busy = False
-        
-        # Sauvegarder les modifications
+ 
         prof_dispo.save()
-
-        # Appeler la méthode de suppression de la classe parente
         super().delete(*args, **kwargs)
 
-    # ... (le reste de votre code ici)
+
 
 
 
